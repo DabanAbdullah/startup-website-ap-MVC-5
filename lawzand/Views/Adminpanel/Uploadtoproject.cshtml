@@ -1,0 +1,234 @@
+﻿@model lawzand.Models.projecttbl
+@using lawzand.Models
+@using System.Data.Entity
+
+@{
+
+    lawzandEntities1 dbb = new lawzandEntities1();
+    
+}
+
+<div>
+
+</div>
+<br />
+<hr />
+<div>
+    <h4>Details</h4>
+    <hr />
+    <input type="hidden" id="pid" value="@Model.projectId" />
+    <dl class="dl-horizontal">
+
+        <dt>
+            @Html.DisplayNameFor(model => model.projectname)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.projectname)
+        </dd>
+        <dt>
+            Language
+        </dt>
+
+        <dd>
+            <p>@dbb.langtbls.Where(x => x.id == Model.lang).FirstOrDefault().language</p>
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.projectpic)
+        </dt>
+
+        <dd>
+            <img src="~/Content/images/@Model.thumb" style="width:300px; height:200px;" class="img-responsive  img-thumbnail img-rounded" />
+        </dd>
+
+
+    </dl>
+
+
+    <hr />
+
+
+    <h2>You Can Upload Multiple Images here</h2>
+    <table class="table table-resonsive table-bordered">
+
+
+        <tr>
+            <td>Upload Files</td>
+            <td>
+                <input id="file" name="Files" type="file" multiple />
+                <div class="progress">
+                    <div id="pb" class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                        0%
+                    </div>
+                </div>
+            </td>
+
+        </tr>
+        <tr>
+            <td colspan="2"><input type="button" value="button" class="btn btn-success" onclick="return Save()" /></td>
+        </tr>
+    </table>
+
+
+    <div class="row">
+
+        @{
+
+
+            foreach (gallerytbl s in dbb.gallerytbls.Where(x=>x.projectId==Model.projectId).ToList().OrderByDescending(x => x.galleryId))
+            { <div class="col-md-4">
+                    
+                    <img src="~/Content/images/@s.pic" class="img-responsive img-thumbnail" style="height:200px; width:350px" />
+                    <hr />
+                    <p>
+                        <a class="btn btn-danger" id="@s.galleryId" href="#" onclick="return deletegall(this.id)">Delete &raquo;</a>
+
+                   
+        </p>
+
+
+                </div>
+
+            }
+
+        }
+
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+    <script>
+        function Save() {
+            debugger;
+            var fileUpload = $("#file").get(0);
+            var files = fileUpload.files;
+            var data = new FormData();
+
+            for (var i = 0; i < files.length; i++) {
+                var fname = files[i].name;
+                var re = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+                if (!re.exec(fname)) {
+                    alert("File extension not supported!");
+                    return false;
+                }
+                else {
+                    data.append("Files", files[i]);
+                }
+            }
+            data.append("Name", $("#pid").val());
+            $.ajax({
+                xhr: function () {
+                    var xhr = new window.XMLHttpRequest();
+                    xhr.upload.addEventListener("progress", function (e) {
+                        if (e.lengthComputable) {
+                            var loaded = e.loaded;
+                            var total = e.total;
+                            var percent = Math.round((loaded / total) * 100);
+
+                            $("#pb").attr("aria-valuenow", percent).css("width", percent + "%").text(percent + "%");
+                        };
+
+                    });
+                    return xhr;
+                },
+                type: "post",
+                url: "/Adminpanel/Filesave",
+                data: data,
+                dataType: "json",
+                contentType: false, // Not to set any content header
+                processData: false,
+                cache: false,
+                success: function (ss) {
+
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: ss,
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+
+                    setTimeout(() => { window.location = '/Adminpanel/Uploadtoproject/' + $("#pid").val(); }, 3000);
+                }
+            });
+        };
+
+
+
+
+
+
+        function deletegall(id) {
+
+
+            Swal.fire({
+                title: 'Do you want to delete selected gallery?',
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: 'Delete',
+
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/Adminpanel/deletegall",
+                        data: '{gid: ' + id + ' }',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (response) {
+
+
+
+                            if (response == "deleted succefully") {
+                                Swal.fire({
+                                    position: 'top-end',
+                                    icon: 'success',
+                                    title: response,
+                                    showConfirmButton: false,
+                                    timer: 1000
+                                })
+
+                                setTimeout(() => { window.location = '/Adminpanel/Uploadtoproject/' + $("#pid").val(); }, 2000);
+                            }
+                            else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: response,
+
+                                })
+                            }
+                        }
+                    });
+
+
+
+                }
+            })
+        }
+    </script>
+
+
+
+
+
+
+
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.projectId }) |
+    @Html.ActionLink("Back to List", "Projects")
+</p>

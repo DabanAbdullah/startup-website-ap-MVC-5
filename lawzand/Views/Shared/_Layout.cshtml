@@ -1,0 +1,108 @@
+﻿@using Microsoft.AspNet.Identity
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Admin Panel</title>
+    <link href="~/Content/js/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
+    <link href="~/Content/admin/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        .swal2-popup {
+            font-size: 1.8rem;
+        }
+    </style>
+
+    @RenderSection("style", required: false)
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("www.halwanco.com", "Index", "Home", new { area = "" }, new { @class = "navbar-brand", target = "_blank" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    @if (Request.IsAuthenticated)
+                    {
+                        <li>@Html.ActionLink("Slider", "Slider", "Adminpanel")</li>
+                        @*<li>@Html.ActionLink("Company", "Company", "Adminpanel")</li>*@
+                        <li>@Html.ActionLink("Partners", "partners", "Adminpanel")</li>
+                        <li>@Html.ActionLink("Service", "Service", "Adminpanel")</li>
+                        <li>@Html.ActionLink("Projects", "Projects", "Adminpanel")</li>
+                        <li>@Html.ActionLink("About", "Info", "Adminpanel")</li>
+                    }
+                </ul>
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer style="position:fixed; bottom:0">
+            <p>&copy; @DateTime.Now.Year - KurdSoft</p>
+        </footer>
+    </div>
+
+    <script src="~/Content/login/jquery-3.2.1.min.js" type="text/javascript"></script>
+    <script src="~/Content/login/popper.js" type="text/javascript"></script>
+    <script src="~/Content/login/bootstrap.min.js" type="text/javascript"></script>
+    <script src="~/Content/login/select2.min.js" type="text/javascript"></script>
+
+    <script src="~/Content/js/sweetalert2/sweetalert2.min.js" type="text/javascript"></script>
+
+    <script src="~/Content/js/sweetalert2/sweet-alerts.init.js" type="text/javascript"></script>
+    <script src="~/Scripts/jquery.signalR-2.2.1.min.js" type="text/javascript"></script>
+    <script src="~/signalr/hubs" type="text/javascript"></script>
+    <script type="text/javascript">
+
+        var toastMixin2 = Swal.mixin({
+            toast: true,
+            icon: 'success',
+            title: 'General Title',
+            animation: false,
+            position: 'top-left',
+            showConfirmButton: false,
+            timer: 4000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        });
+        var chat = $.connection.chatHub;
+        $(function () {
+            chat.client.online = function (count) {
+                $("#num").html("("+count+")Online Users");
+            };
+            chat.client.addNewMessageToPage = function (name, message) {
+                //  $('#discussion').append('<ul style="list-style-type:square"><li><strong style="color:red;font-style:normal;font-size:medium;text-transform:uppercase">' + htmlEncode(name) + '  ' + '<strong style="color:black;font-style:normal;font-size:medium;text-transform:lowercase">said</strong>'
+                //    + '</strong>: ' + '<strong style="color:blue;font-style:oblique;font-size:medium">' + htmlEncode(message) + '</strong>' + '</li></ul>');
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: htmlEncode(message),
+                    showConfirmButton: false,
+                    timer: 2000
+                })
+            };
+        });
+        function htmlEncode(value) {
+            var encodedValue = $('<div />').text(value).html();
+            return encodedValue;
+        }
+    </script>
+
+
+
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

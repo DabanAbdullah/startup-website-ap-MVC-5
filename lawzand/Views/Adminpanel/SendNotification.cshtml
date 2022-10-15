@@ -1,0 +1,101 @@
+﻿@using lawzand.Models
+@{
+
+
+
+
+    lawzandEntities1 dbb = new lawzandEntities1();
+
+  
+
+    ViewBag.Title = "SendNotification";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>SendNotification</h2>
+
+
+
+
+<div class="form-horizontal">
+    <h4>Send Notofication</h4>
+    <hr />
+
+
+
+    <div class="form-group">
+        <label class="control-label col-md-2" for="lang">Language</label>
+        <div class="col-md-10">
+
+            <select class="form-control select2" id="lang" name="lang">
+
+                @{
+
+                    foreach (langtbl l in dbb.langtbls.ToList())
+                    {
+                        <option value=@l.id>@l.language</option>
+                    }
+                }
+
+            </select>
+
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label class="control-label col-md-2" for="lang">Message</label>
+        <div class="col-md-10">
+            <input type="text" id="mess" class="form-control" placeholder="message" />
+
+        </div>
+    </div>
+
+
+
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Send" id="sendmessage" class="btn btn-default" />
+        </div>
+    </div>
+
+
+
+    <div class="form-group">
+        <p id="num" class="form-control"> </p>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+@section scripts {
+  
+    <script>
+
+       
+
+
+
+      //  $('#displayname').val(prompt('Your Good Name Please:', ''));
+
+       
+        $('#mess').focus();
+        $.connection.hub.start().done(function () {
+            $('#sendmessage').click(function () {
+                var lang = $("#lang option:selected").text();
+                chat.server.send(lang, $('#mess').val());
+                $('#mess').val('').focus();
+            });
+        });
+    </script>
+}

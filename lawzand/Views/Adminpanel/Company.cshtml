@@ -1,0 +1,100 @@
+﻿@using lawzand.Models
+@{
+    ViewBag.Title = "Admin Partners";
+    lawzandEntities1 dbb = new lawzandEntities1();
+}
+
+
+
+
+<div class="jumbotron">
+    <h1>Company</h1>
+
+    <p><a href="~/Adminpanel/Addcompany" class="btn btn-primary btn-lg">Create New &raquo;</a></p>
+</div>
+
+
+<div class="row">
+
+    @{
+
+
+        foreach (companytbl s in dbb.companytbls.ToList().OrderByDescending(x => x.companyId))
+        { <div class="col-md-4">
+                <h3>@s.companyname</h3>
+                <img src="~/Content/images/@s.thumb" class="img-responsive img-thumbnail" style="height:200px; width:350px" />
+                <hr />
+                <p><a class="btn btn-danger" id="@s.companyId" href="#" onclick="return deletecompany(this.id)">Delete &raquo;</a>
+    
+                   <a class="btn btn-success" id="@s.companyId" href="~/Adminpanel/Addcompany/@s.companyId" >Edit &raquo;</a>
+    </p>
+
+
+            </div>
+
+        }
+
+    }
+
+
+
+</div>
+
+
+
+
+<script>
+
+    function deletecompany(id)
+    {
+
+
+        Swal.fire({
+            title: 'Do you want to delete selected company?',
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: 'Delete',
+
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Adminpanel/deletecompany",
+                    data: '{cid: ' + id + ' }',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+
+
+
+                        if (response == "deleted succefully") {
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'success',
+                                title: response,
+                                showConfirmButton: false,
+                                timer: 2000
+                            })
+
+                            setTimeout(() => { window.location = '/Adminpanel/Company'; }, 3000);
+                        }
+                        else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: response,
+
+                            })
+                        }
+                    }
+                });
+
+
+
+            }
+        })
+    }
+
+</script>

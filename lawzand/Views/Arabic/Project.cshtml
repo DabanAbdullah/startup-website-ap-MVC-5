@@ -1,0 +1,37 @@
+﻿@model lawzand.Models.projecttbl
+@using lawzand.Models
+@{
+    ViewBag.Title = "المشاريع";
+    Layout = "~/Views/Shared/_Arabic.cshtml";
+    lawzandEntities1 dbb = new lawzandEntities1();
+}
+
+@section style{
+
+    <script src="~/Content/main/fancyjs/jquery.fancybox.min.js"></script>
+    <link href="~/Content/main/fancyjs/jquery.fancybox.min.css" rel="stylesheet" />
+}
+<div class="maincontent">
+    <div class="detailheader">
+        <h4> @Model.projectname</h4>
+        <div class="liner-wrapper2"><div class="line-divider2"></div><div class="liner-dot2"></div><div class="liner-dot2 right"></div></div>
+    </div>
+    <div class="detaildiv">
+        <div class="detailimg image">
+            <img src="~/Content/images/@Model.projectpic" />
+        </div>
+        <p>
+            @Html.Raw(Model.projectcontent)
+        </p>
+
+        @foreach (gallerytbl s in dbb.gallerytbls.Where(x => x.projectId == Model.projectId).ToList())
+        {
+            <div class="gallerysection">
+                <a data-fancybox="gallery" class="image" href="~/Content/images/@s.pic"><img src="~/Content/images/@s.pic" width="300" /></a>
+            </div>
+        }
+    </div>
+</div>
+<div class="partner">
+
+</div>

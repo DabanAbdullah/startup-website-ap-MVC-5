@@ -1,0 +1,141 @@
+﻿@model lawzand.Models.partnertbl
+@using lawzand.Models
+
+@{
+
+    lawzandEntities1 dbb = new lawzandEntities1();
+
+    ViewBag.Title = "AddPartners";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+
+</div>
+<br />
+<hr />
+@using (Html.BeginForm("Addpartners", "Adminpanel", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Add New Partner</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            <label class="control-label col-md-2" for="lang">Id</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.partnerId, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                @Html.ValidationMessageFor(model => model.partnerId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2" for="lang">Photo</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.partnerpic, new { htmlAttributes = new { @class = "form-control", type = "file", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.partnerpic, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+            <label class="control-label col-md-2" for="lang">Preview</label>
+            <div class="col-md-10">
+                <img src="~/Content/images/@Model.thumb" id="prev" class="img-rounded img-responsive form-control" style="width:600px; height:200px;" />
+            </div>
+
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2" for="lang">Name</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.partnername, new { htmlAttributes = new { @class = "form-control", placeholder = "Partner Name", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.partnername, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2" for="lang">Link</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.partnerlink, new { htmlAttributes = new { @class = "form-control", placeholder = "Partner Link Adress" } })
+                @Html.ValidationMessageFor(model => model.partnerlink, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2" for="lang">Language</label>
+            <div class="col-md-10">
+
+                <select class="form-control select2" id="lang" name="lang">
+                    @{
+                        foreach (langtbl l in dbb.langtbls.ToList())
+                        {
+                            <option value=@l.id>@l.language</option>
+                        }
+                    }
+
+                </select>
+
+            </div>
+        </div>
+
+
+
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-success" />
+            </div>
+        </div>
+        <div class="form-group">
+
+            <div class="col-md-10">
+                @if (ViewBag.result != null)
+                {
+                    <p>@ViewBag.result</p>
+                }
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+}
+
+<div>
+    @Html.ActionLink("Back to List", "partners")
+</div>
+
+
+@section scripts{
+
+   
+
+    <script>
+     
+
+         function readURL(input) {
+
+            $('#prev').attr('src', '/Content/service/@Model.partnerpic');
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#prev').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#partnerpic").change(function () {
+            readURL(this);
+        });
+    </script>
+
+}

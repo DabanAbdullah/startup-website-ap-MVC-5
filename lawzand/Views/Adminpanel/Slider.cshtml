@@ -1,0 +1,160 @@
+﻿@using lawzand.Models
+@{
+    ViewBag.Title = "Admin Slider";
+    lawzandEntities1 dbb = new lawzandEntities1();
+}
+
+
+
+
+<div class="jumbotron">
+    <h1>Slider</h1>
+    <h3>When Adding new slider it will automaticaly show on your website</h3>
+    <p><a href="~/Adminpanel/Addslider" class="btn btn-primary btn-lg">Create New &raquo;</a></p>
+</div>
+
+
+<div class="row">
+
+    @{
+        try
+        {
+
+    <ul class="nav nav-tabs">
+
+        <li><a data-toggle="tab" href="#0"></a></li>
+        @foreach (langtbl aa in dbb.langtbls.ToList())
+        {
+
+            <li><a data-toggle="tab" href="#@aa.language">@aa.language</a></li>
+
+
+        }
+
+
+
+
+    </ul>
+
+            <div class="tab-content">
+
+
+
+
+
+
+
+
+
+
+                @foreach (langtbl aa in dbb.langtbls.ToList())
+                {
+
+
+
+                    <div id="@aa.language" class="tab-pane">
+
+                        @foreach (slidertbl s in dbb.slidertbls.Where(x => x.lang == aa.id).ToList().OrderByDescending(x => x.sliderId))
+                        {<div class="col-md-4">
+
+                                <h3> @s.slidercontent</h3> 
+
+
+                                <img src="~/Content/images/@s.sliderpic" class="img-responsive img-thumbnail" style="height:200px; width:350px" />
+                                <hr />
+                                <p><a class="btn btn-danger" id="@s.sliderId" href="#" onclick="return deleteproject(this.id)">Delete &raquo;</a></p>
+
+
+                            </div>
+
+                        }
+
+
+                    </div>
+
+
+
+                }
+
+
+
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+        }
+        catch { }
+    }
+
+</div>
+
+
+
+
+<script>
+
+    function deleteproject(id) {
+
+
+        Swal.fire({
+            title: 'Do you want to delete selected Slider?',
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: 'Delete',
+
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Adminpanel/deleteslider",
+                    data: '{slider: ' + id + ' }',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+
+
+
+                        if (response == "deleted succefully") {
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'success',
+                                title: response,
+                                showConfirmButton: false,
+                                timer: 2000
+                            })
+
+                            setTimeout(() => { window.location = '/Adminpanel/slider'; }, 3000);
+                        }
+                        else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: response,
+
+                            })
+                        }
+                    }
+                });
+
+
+
+            }
+        })
+    }
+
+</script>
+
+@section scripts{
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>}

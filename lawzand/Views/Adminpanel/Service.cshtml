@@ -1,0 +1,149 @@
+﻿@using lawzand.Models
+@{
+    ViewBag.Title = "Admin Service";
+    lawzandEntities1 dbb = new lawzandEntities1();
+}
+
+
+
+
+<div class="jumbotron">
+    <h1>Service</h1>
+
+    <p><a href="~/Adminpanel/Addservice" class="btn btn-primary btn-lg">Create New &raquo;</a></p>
+</div>
+
+
+<div class="row">
+
+    @{
+        try
+        {
+
+            <ul class="nav nav-tabs">
+
+                <li><a data-toggle="tab" href="#0"></a></li>
+                @foreach (langtbl aa in dbb.langtbls.ToList())
+                {
+
+                    <li><a data-toggle="tab" href="#@aa.language">@aa.language</a></li>
+
+
+                }
+
+
+
+
+            </ul>
+
+            <div class="tab-content">
+
+
+                @foreach (langtbl aa in dbb.langtbls.ToList())
+                {
+
+
+
+                    <div id="@aa.language" class="tab-pane">
+
+                        @foreach (servicetbl s in dbb.servicetbls.Where(x => x.lang == aa.id).ToList().OrderByDescending(x => x.serviceId))
+                        {<div class="col-md-4">
+
+                                <h3> @s.servicename</h3>
+
+
+                                <img src="~/Content/images/@s.thumb" class="img-responsive img-thumbnail" style="height:200px; width:350px" />
+                                <hr />
+                                <p><a class="btn btn-danger" id="@s.serviceId" href="#" onclick="return deleteservice(this.id)">Delete &raquo;</a>
+                                   <a class="btn btn-success" id="@s.serviceId" href="/Adminpanel/Addservice/@s.serviceId" >Edit &raquo;</a>
+                        </p>
+
+
+                            </div>
+
+                        }
+
+
+                    </div>
+
+
+
+                }
+
+
+
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+        }
+        catch { }
+    }
+
+</div>
+
+
+
+
+            <script>
+
+                function deleteservice(id) {
+
+
+                    Swal.fire({
+                        title: 'Do you want to delete selected Service?',
+                        showDenyButton: true,
+                        showCancelButton: true,
+                        confirmButtonText: 'Delete',
+
+                    }).then((result) => {
+                        /* Read more about isConfirmed, isDenied below */
+                        if (result.isConfirmed) {
+
+                            $.ajax({
+                                type: "POST",
+                                url: "/Adminpanel/deleteservice",
+                                data: '{sid: ' + id + ' }',
+                                contentType: "application/json; charset=utf-8",
+                                dataType: "json",
+                                success: function (response) {
+
+
+
+                                    if (response == "deleted succefully") {
+                                        Swal.fire({
+                                            position: 'top-end',
+                                            icon: 'success',
+                                            title: response,
+                                            showConfirmButton: false,
+                                            timer: 2000
+                                        })
+
+                                        setTimeout(() => { window.location = '/Adminpanel/Service'; }, 3000);
+                                    }
+                                    else {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Oops...',
+                                            text: response,
+
+                                        })
+                                    }
+                                }
+                            });
+
+
+
+                        }
+                    })
+                }
+
+            </script>

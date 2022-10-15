@@ -1,0 +1,222 @@
+﻿@model lawzand.Models.infotbl
+@using lawzand.Models
+
+@{
+    lawzandEntities1 dbb = new lawzandEntities1();
+    ViewBag.Title = "Info";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@using (Html.BeginForm("Info", "Adminpanel", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <h4>Add New Company</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+
+    <div class="form-group">
+        <label class="control-label col-md-2" for="lang">Language</label>
+        <div class="col-md-10">
+
+            <select class="form-control select2" onchange="select()" id="lang" name="lang">
+
+                @{
+
+                    foreach (langtbl l in dbb.langtbls.ToList())
+                    {
+                        <option value=@l.id>@l.language</option>
+                    }
+                }
+
+            </select>
+
+        </div>
+    </div>
+
+
+
+
+    <div class="form-group">
+        <label class="control-label col-md-2" for="lang">Id</label>
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Id, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+            @Html.ValidationMessageFor(model => model.Id, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+
+    <div class="form-group">
+        <label class="control-label col-md-2" for="lang">Adress</label>
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.adress, new { htmlAttributes = new { @class = "form-control", placeholder = "Adress", @required = "required" } })
+            @Html.ValidationMessageFor(model => model.adress, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+
+
+    <div class="form-group">
+        <label class="control-label col-md-2" for="lang">About Detail</label>
+        <div class="col-md-10">
+            @Html.TextAreaFor(model => model.About, new { @id = "content", @class = "form-control", @rows = "200" })
+        </div>
+    </div>
+
+
+
+
+    <div class="form-group">
+        <label class="control-label col-md-2" for="lang">Contact detail</label>
+        <div class="col-md-10">
+            @Html.TextAreaFor(model => model.contactdetail, new { @id = "contactdetail", @class = "form-control", @rows = "200" })
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Save" class="btn btn-primary" />
+            <input type="submit" value="Delete" id="delete" class="btn btn-danger" />
+            <a href="/Adminpanel/contact/" class="btn btn-success">Contact information</a>
+
+
+
+        </div>
+    </div>
+    <div class="form-group">
+
+        <div class="col-md-10">
+            @if (ViewBag.result != null)
+            {
+                <p>@ViewBag.result</p>
+            }
+        </div>
+    </div>
+</div>
+
+
+
+
+
+}
+
+@section scripts{
+
+    <script src="~/Content/ckeditor/ckeditor.js" type="text/javascript"></script>
+
+
+    
+        <script type="text/javascript">
+
+
+            var toastMixin = Swal.mixin({
+                toast: true,
+                icon: 'success',
+                title: 'General Title',
+                animation: false,
+                position: 'top-left',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            });
+
+
+
+            $(function () {
+                var roxyFileman = '/Content/fileman/index.html';
+                CKEDITOR.replace("content", {
+                    filebrowserBrowseUrl: roxyFileman,
+                    filebrowserImageBrowseUrl: roxyFileman + '?type=image',
+                    removeDialogTabs: 'link:upload;image:upload'
+                });
+
+
+                var roxyFileman2 = '/Content/fileman/index.html';
+                CKEDITOR.replace("contactdetail", {
+                    filebrowserBrowseUrl: roxyFileman2,
+                    filebrowserImageBrowseUrl: roxyFileman2 + '?type=image',
+                    removeDialogTabs: 'link:upload;image:upload'
+                });
+
+
+                try {
+                    $("#lang").val("@Model.lang");
+                } catch { }
+
+            });
+
+
+            function select() {
+                if ($("#lang").val() != "#") {
+                 
+                    window.location = '/Adminpanel/info/' + $("#lang").val();
+                }
+            }
+
+            $("#delete").click(function (e) {
+                e.preventDefault();
+                if ($("#lang").val() != null) {
+
+                    Swal.fire({
+                        title: 'Do you want to Delete ?',
+                        showDenyButton: true,
+                        showCancelButton: true,
+                        confirmButtonText: 'Delete',
+                        
+                    }).then((result) => {
+                        /* Read more about isConfirmed, isDenied below */
+                        if (result.isConfirmed) {
+                            del($("#lang").val());
+                           
+                        }
+                       
+                    })
+
+                   
+                }
+            });
+
+
+            function del(lang) {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Adminpanel/deleteinfo",
+                    data: '{lang:' + lang + '}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+
+
+                        toastMixin.fire({
+
+                            animation: true,
+                            title: response
+                        });
+                        setTimeout(() => { window.location = window.location.href; }, 3000);
+
+                    }
+
+
+
+
+
+                });
+
+
+            }
+
+ </script>
+
+}

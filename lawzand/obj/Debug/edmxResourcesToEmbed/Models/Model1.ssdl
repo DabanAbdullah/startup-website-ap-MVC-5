@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="lawzandModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="AspNetUsers">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="Email" Type="nvarchar" MaxLength="256" />
+    <Property Name="EmailConfirmed" Type="bit" Nullable="false" />
+    <Property Name="PasswordHash" Type="nvarchar(max)" />
+    <Property Name="SecurityStamp" Type="nvarchar(max)" />
+    <Property Name="PhoneNumber" Type="nvarchar(max)" />
+    <Property Name="PhoneNumberConfirmed" Type="bit" Nullable="false" />
+    <Property Name="TwoFactorEnabled" Type="bit" Nullable="false" />
+    <Property Name="LockoutEndDateUtc" Type="datetime" />
+    <Property Name="LockoutEnabled" Type="bit" Nullable="false" />
+    <Property Name="AccessFailedCount" Type="int" Nullable="false" />
+    <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
+    <Property Name="fullname" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="contacttbl">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="phone" Type="varchar" MaxLength="50" />
+    <Property Name="email" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="fb" Type="varchar" MaxLength="200" />
+    <Property Name="othersocial" Type="varchar" MaxLength="200" />
+    <Property Name="youtube" Type="varchar" MaxLength="200" />
+    <Property Name="ID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="gallerytbl">
+    <Key>
+      <PropertyRef Name="galleryId" />
+    </Key>
+    <Property Name="galleryId" Type="numeric" Precision="18" Scale="0" Nullable="false" />
+    <Property Name="projectId" Type="numeric" Precision="10" Scale="0" />
+    <Property Name="pic" Type="nvarchar" MaxLength="300" />
+  </EntityType>
+  <EntityType Name="infotbl">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="About" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="lang" Type="int" Nullable="false" />
+    <Property Name="adress" Type="nvarchar" MaxLength="200" />
+    <Property Name="contactdetail" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="langtbl">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" Nullable="false" />
+    <Property Name="language" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="partnertbl">
+    <Key>
+      <PropertyRef Name="partnerId" />
+    </Key>
+    <Property Name="partnerId" Type="numeric" Precision="10" Scale="0" Nullable="false" />
+    <Property Name="partnername" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="partnerpic" Type="nvarchar" MaxLength="300" Nullable="false" />
+    <Property Name="thumb" Type="nvarchar" MaxLength="300" Nullable="false" />
+    <Property Name="partnerlink" Type="nvarchar" MaxLength="500" />
+    <Property Name="lang" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="projecttbl">
+    <Key>
+      <PropertyRef Name="projectId" />
+    </Key>
+    <Property Name="projectId" Type="numeric" Precision="10" Scale="0" Nullable="false" />
+    <Property Name="projectname" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="company" Type="int" Nullable="false" />
+    <Property Name="projectpic" Type="nvarchar" MaxLength="300" Nullable="false" />
+    <Property Name="thumb" Type="nvarchar" MaxLength="300" Nullable="false" />
+    <Property Name="projectcontent" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="lang" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="servicetbl">
+    <Key>
+      <PropertyRef Name="serviceId" />
+    </Key>
+    <Property Name="serviceId" Type="numeric" Precision="10" Scale="0" Nullable="false" />
+    <Property Name="servicename" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="servicepic" Type="nvarchar" MaxLength="300" Nullable="false" />
+    <Property Name="servicecontent" Type="nvarchar(max)" />
+    <Property Name="thumb" Type="nvarchar" MaxLength="300" Nullable="false" />
+    <Property Name="lang" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="slidertbl">
+    <Key>
+      <PropertyRef Name="sliderId" />
+    </Key>
+    <Property Name="sliderId" Type="int" Nullable="false" />
+    <Property Name="sliderpic" Type="nvarchar" MaxLength="300" Nullable="false" />
+    <Property Name="slidercontent" Type="nvarchar(max)" />
+    <Property Name="lang" Type="int" />
+    <Property Name="link" Type="nvarchar" MaxLength="300" />
+  </EntityType>
+  <EntityType Name="sudo">
+    <Key>
+      <PropertyRef Name="pass" />
+    </Key>
+    <Property Name="pass" Type="nvarchar" MaxLength="20" Nullable="false" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'ks_halwaco.dbo.projectview' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="projectview">
+    <Key>
+      <PropertyRef Name="lang" />
+      <PropertyRef Name="projectId" />
+      <PropertyRef Name="Sequence_no" />
+    </Key>
+    <Property Name="Sequence_no" Type="bigint" Nullable="false" />
+    <Property Name="lang" Type="int" Nullable="false" />
+    <Property Name="pic" Type="nvarchar" MaxLength="300" />
+    <Property Name="projectId" Type="numeric" Precision="10" Scale="0" Nullable="false" />
+  </EntityType>
+  <EntityContainer Name="lawzandModelStoreContainer">
+    <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="contacttbl" EntityType="Self.contacttbl" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="gallerytbl" EntityType="Self.gallerytbl" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="infotbl" EntityType="Self.infotbl" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="langtbl" EntityType="Self.langtbl" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="partnertbl" EntityType="Self.partnertbl" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="projecttbl" EntityType="Self.projecttbl" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="servicetbl" EntityType="Self.servicetbl" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="slidertbl" EntityType="Self.slidertbl" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sudo" EntityType="Self.sudo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="projectview" EntityType="Self.projectview" store:Type="Views" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [projectview].[Sequence_no] AS [Sequence_no], 
+    [projectview].[lang] AS [lang], 
+    [projectview].[pic] AS [pic], 
+    [projectview].[projectId] AS [projectId]
+    FROM [dbo].[projectview] AS [projectview]</DefiningQuery>
+    </EntitySet>
+  </EntityContainer>
+</Schema>

@@ -1,0 +1,105 @@
+﻿@model lawzand.Models.slidertbl
+@using lawzand.Models
+
+@{
+
+    lawzandEntities1 dbb = new lawzandEntities1();
+
+    ViewBag.Title = "Addslider";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+
+</div>
+<br />
+<hr />
+
+@using (Html.BeginForm("Addslider", "Adminpanel", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Add New Slider</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            <label class="control-label col-md-2" for="lang">Id</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.sliderId, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                @Html.ValidationMessageFor(model => model.sliderId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2" for="lang">Photo</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.sliderpic, new { htmlAttributes = new { @class = "form-control", type = "file", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.sliderpic, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2" for="lang">Content</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.slidercontent, new { htmlAttributes = new { @class = "form-control", placeholder = "samall Text" } })
+                @Html.ValidationMessageFor(model => model.slidercontent, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2" for="lang">Link</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.link, new { htmlAttributes = new { @class = "form-control", Value = "#", placeholder = "Reference" } })
+                @Html.ValidationMessageFor(model => model.link, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2" for="lang">Language</label>
+            <div class="col-md-10">
+
+                <select class="form-control select2" id="lang" name="lang">
+                    @{
+                        foreach (langtbl l in dbb.langtbls.ToList())
+                        {
+                            <option value=@l.id>@l.language</option>
+                        }
+                    }
+
+                </select>
+
+            </div>
+        </div>
+
+
+
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-success" />
+            </div>
+        </div>
+        <div class="form-group">
+
+            <div class="col-md-10">
+                @if (ViewBag.result != null)
+                {
+                    <p>@ViewBag.result</p>
+                }
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Slider")
+</div>
+
+

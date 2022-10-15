@@ -1,0 +1,250 @@
+﻿@using lawzand.Models
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    lawzandEntities1 dbb = new lawzandEntities1();
+}
+
+<div class="jumbotron">
+    <h1>Register & Disable or Enable Admin By Email</h1>
+
+    <p>
+        <a href="/Account/Register" class="btn btn-primary btn-lg">Register New Admin &raquo;</a>
+        <a href="#" class="btn btn-danger btn-lg" onclick="return disable()">Disable &raquo;</a>
+        <a href="#" class="btn btn-success btn-lg" onclick="return Enable()">Enable &raquo;</a>
+        <a href="/Adminpanel/SendNotification" class="btn btn-warning btn-lg" >Broadcast to online Users realtime &raquo;</a>
+    </p>
+</div>
+
+<div class="row">
+
+
+    <table class="table table-hover table-dark">
+        <thead>
+            <tr>
+              
+                <th scope="col">Email</th>
+                <th scope="col">FullName</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (AspNetUser s in dbb.AspNetUsers.ToList())
+            {
+            <tr style="font-family:'Unikurd Jino'; font-size:large">
+                <td>@s.Email</td>
+                <td>@s.fullname</td>
+            </tr>
+                    }
+
+               
+
+            </tbody>
+    </table>
+
+</div>
+
+
+
+@section scripts{
+    
+    <script>
+
+            function disable() {
+
+
+                Swal.fire({
+                    title: 'Write down Super Admin Password',
+                    input: 'text',
+                    inputAttributes: {
+                        autocapitalize: 'off'
+                    },
+                    showCancelButton: true,
+                    confirmButtonText: 'Cinfirm Identity',
+                    showLoaderOnConfirm: true,
+                    preConfirm: (login) => {
+                        var username = login;
+
+                        $.ajax({
+                            type: "POST",
+                            url: "/Account/sudo",
+                            data: '{pass: "' + username + '" }',
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function (response) {
+
+
+
+                                if (response == "ok") {
+
+                                    Swal.fire({
+                                        title: 'Write down The email which you want to disable',
+                                        input: 'text',
+                                        inputAttributes: {
+                                            autocapitalize: 'off'
+                                        },
+                                        showCancelButton: true,
+                                        confirmButtonText: 'Disable Account',
+                                        showLoaderOnConfirm: true,
+                                        preConfirm: (login) => {
+                                            var username = login;
+
+                                            $.ajax({
+                                                type: "POST",
+                                                url: "/Account/lockout",
+                                                data: '{email: "' + username + '" }',
+                                                contentType: "application/json; charset=utf-8",
+                                                dataType: "json",
+                                                success: function (response) {
+
+
+
+                                                    if (response == "ok") {
+                                                        Swal.fire({
+                                                            position: 'top-end',
+                                                            icon: 'success',
+                                                            title: response,
+                                                            showConfirmButton: false,
+                                                            timer: 3000
+                                                        })
+                                                        setTimeout(() => { window.location = '/Adminpanel/Index'; }, 3000);
+                                                    }
+                                                    else {
+                                                        Swal.fire({
+                                                            icon: 'error',
+                                                            title: 'Oops...',
+                                                            text: response,
+
+                                                        })
+                                                    }
+                                                }
+                                            });
+                                        },
+                                        allowOutsideClick: () => !Swal.isLoading()
+                                    });
+
+
+
+
+
+                                }
+                                else {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Oops...',
+                                        text: response,
+
+                                    })
+                                }
+                            }
+                        });
+                    },
+                    allowOutsideClick: () => !Swal.isLoading()
+                });
+
+
+
+
+
+
+           
+        }
+
+        function Enable() {
+
+            Swal.fire({
+                title: 'Write down Super Admin Password',
+                input: 'text',
+                inputAttributes: {
+                    autocapitalize: 'off'
+                },
+                showCancelButton: true,
+                confirmButtonText: 'Cinfirm Identity',
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    var username = login;
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/Account/sudo",
+                        data: '{pass: "' + username + '" }',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (response) {
+
+
+
+                            if (response == "ok") {
+
+                                Swal.fire({
+                                    title: 'Write down The email which you want to Enable',
+                                    input: 'text',
+                                    inputAttributes: {
+                                        autocapitalize: 'off'
+                                    },
+                                    showCancelButton: true,
+                                    confirmButtonText: 'Enable Account',
+                                    showLoaderOnConfirm: true,
+                                    preConfirm: (login) => {
+                                        var username = login;
+
+                                        $.ajax({
+                                            type: "POST",
+                                            url: "/Account/disablelockout",
+                                            data: '{email: "' + username + '" }',
+                                            contentType: "application/json; charset=utf-8",
+                                            dataType: "json",
+                                            success: function (response) {
+
+
+
+                                                if (response == "ok") {
+                                                    Swal.fire({
+                                                        position: 'top-end',
+                                                        icon: 'success',
+                                                        title: response,
+                                                        showConfirmButton: false,
+                                                        timer: 3000
+                                                    })
+                                                    setTimeout(() => { window.location = '/Adminpanel/Index'; }, 3000);
+                                                }
+                                                else {
+                                                    Swal.fire({
+                                                        icon: 'error',
+                                                        title: 'Oops...',
+                                                        text: response,
+
+                                                    })
+                                                }
+                                            }
+                                        });
+                                    },
+                                    allowOutsideClick: () => !Swal.isLoading()
+                                });
+
+
+
+
+
+                            }
+                            else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: response,
+
+                                })
+                            }
+                        }
+                    });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            });
+
+
+        }
+    </script>
+    
+    
+    }

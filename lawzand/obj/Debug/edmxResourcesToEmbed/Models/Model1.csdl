@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="lawzandModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="lawzandEntities1" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="AspNetUsers" EntityType="lawzandModel.AspNetUser" />
+    <EntitySet Name="gallerytbls" EntityType="lawzandModel.gallerytbl" />
+    <EntitySet Name="partnertbls" EntityType="lawzandModel.partnertbl" />
+    <EntitySet Name="projecttbls" EntityType="lawzandModel.projecttbl" />
+    <EntitySet Name="servicetbls" EntityType="lawzandModel.servicetbl" />
+    <EntitySet Name="slidertbls" EntityType="lawzandModel.slidertbl" />
+    <EntitySet Name="langtbls" EntityType="lawzandModel.langtbl" />
+    <EntitySet Name="sudoes" EntityType="lawzandModel.sudo" />
+    <EntitySet Name="infotbls" EntityType="lawzandModel.infotbl" />
+    <EntitySet Name="projectviews" EntityType="lawzandModel.projectview" />
+    <EntitySet Name="contacttbls" EntityType="lawzandModel.contacttbl" />
+  </EntityContainer>
+  <EntityType Name="AspNetUser">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="EmailConfirmed" Type="Boolean" Nullable="false" />
+    <Property Name="PasswordHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="SecurityStamp" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="PhoneNumberConfirmed" Type="Boolean" Nullable="false" />
+    <Property Name="TwoFactorEnabled" Type="Boolean" Nullable="false" />
+    <Property Name="LockoutEndDateUtc" Type="DateTime" Precision="3" />
+    <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
+    <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
+    <Property Name="UserName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="fullname" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="gallerytbl">
+    <Key>
+      <PropertyRef Name="galleryId" />
+    </Key>
+    <Property Name="galleryId" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+    <Property Name="projectId" Type="Decimal" Precision="10" Scale="0" />
+    <Property Name="pic" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="partnertbl">
+    <Key>
+      <PropertyRef Name="partnerId" />
+    </Key>
+    <Property Name="partnerId" Type="Decimal" Nullable="false" Precision="10" Scale="0" />
+    <Property Name="partnername" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="partnerpic" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="true" />
+    <Property Name="thumb" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="true" />
+    <Property Name="partnerlink" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="lang" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="projecttbl">
+    <Key>
+      <PropertyRef Name="projectId" />
+    </Key>
+    <Property Name="projectId" Type="Decimal" Nullable="false" Precision="10" Scale="0" />
+    <Property Name="company" Type="Int32" Nullable="false" />
+    <Property Name="projectpic" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="true" />
+    <Property Name="thumb" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="true" />
+    <Property Name="projectcontent" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="lang" Type="Int32" Nullable="false" />
+    <Property Name="projectname" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="servicetbl">
+    <Key>
+      <PropertyRef Name="serviceId" />
+    </Key>
+    <Property Name="serviceId" Type="Decimal" Nullable="false" Precision="10" Scale="0" />
+    <Property Name="servicename" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="servicepic" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="true" />
+    <Property Name="servicecontent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="thumb" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="true" />
+    <Property Name="lang" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="slidertbl">
+    <Key>
+      <PropertyRef Name="sliderId" />
+    </Key>
+    <Property Name="sliderId" Type="Int32" Nullable="false" />
+    <Property Name="sliderpic" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="true" />
+    <Property Name="slidercontent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="lang" Type="Int32" />
+    <Property Name="link" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="langtbl">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" />
+    <Property Name="language" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="sudo">
+    <Key>
+      <PropertyRef Name="pass" />
+    </Key>
+    <Property Name="pass" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="infotbl">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="About" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="lang" Type="Int32" Nullable="false" />
+    <Property Name="adress" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="contactdetail" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="projectview">
+    <Key>
+      <PropertyRef Name="lang" />
+      <PropertyRef Name="projectId" />
+      <PropertyRef Name="Sequence_no" />
+    </Key>
+    <Property Name="Sequence_no" Type="Int64" Nullable="false" />
+    <Property Name="lang" Type="Int32" Nullable="false" />
+    <Property Name="pic" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+    <Property Name="projectId" Type="Decimal" Nullable="false" Precision="10" Scale="0" />
+  </EntityType>
+  <EntityType Name="contacttbl">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="fb" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="othersocial" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="youtube" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="ID" Type="Int32" Nullable="false" />
+  </EntityType>
+</Schema>

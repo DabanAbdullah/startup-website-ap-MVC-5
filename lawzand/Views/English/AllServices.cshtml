@@ -1,0 +1,55 @@
+﻿@model IEnumerable<lawzand.Models.servicetbl>
+@using System.Text.RegularExpressions;
+@{
+    ViewBag.Title = "All Services";
+    Layout = "~/Views/Shared/_English.cshtml";
+    @helper StripHTML(string input)
+    {
+        if (!string.IsNullOrEmpty(input))
+        {
+            input = Regex.Replace(input, @"(?></?\w+)(?>(?:[^>'""]+|'[^']*'|""[^""]*"")*)>", String.Empty);
+            input = input.Replace("&nbsp;", " ");
+            <span>@input</span>
+        }
+    }
+}
+
+<div class="servicesection">
+    <div class="maincontent">
+        <div class="header">
+            <h4>Services</h4>
+            <div class="liner-wrapper"><div class="line-divider"></div><div class="liner-dot"></div><div class="liner-dot right"></div></div>
+        </div>
+
+
+        @foreach (var s in Model)
+        {<div class="servitem">
+                <div class="servitemimg">
+                    <a href="/English/Service/@s.serviceId" class="image">
+                        <img src="~/Content/images/@s.thumb" />
+                    </a>
+                </div>
+                <div class="servtitle">
+                    <h4 class="animated wow fadeInUp">
+                        <a href="/English/Service/@s.serviceId"><i class="fas fa-square-full"></i> @s.servicename</a>
+                    </h4>
+                    <p class="animated wow fadeInUp">
+                        @StripHTML(s.servicecontent.Length > 100 ? s.servicecontent.Substring(0, 100) : s.servicecontent)
+
+                    </p>
+                </div>
+
+            </div>}
+
+
+    </div>
+</div>
+
+<div class="partner">
+    <div class="maincontent" dir="ltr">
+        <div class="headerc">
+            <h4></h4>
+        </div>
+
+    </div>
+</div>

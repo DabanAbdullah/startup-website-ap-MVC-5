@@ -1,0 +1,25 @@
+﻿@model lawzand.Models.servicetbl
+@{
+    ViewBag.Title = "Service";
+    Layout = "~/Views/Shared/_English.cshtml";
+}
+
+<div class="maincontent">
+    <div class="detailheader">
+        <h4> @Model.servicename</h4>
+        <div class="liner-wrapper2"><div class="line-divider2"></div><div class="liner-dot2"></div><div class="liner-dot2 right"></div></div>
+    </div>
+    <div class="detaildiv">
+        <div class="detailimg image">
+            <img src="~/Content/images/@Model.servicepic" />
+        </div>
+        <p>
+            @Html.Raw(Model.servicecontent)
+        </p>
+
+    </div>
+</div>
+<div class="partner">
+
+</div>
+

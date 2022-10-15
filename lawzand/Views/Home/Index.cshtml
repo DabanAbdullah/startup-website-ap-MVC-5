@@ -1,0 +1,107 @@
+﻿@using System.Text.RegularExpressions;
+@using lawzand.Models
+@{
+    ViewBag.Title = "سەرەکی";
+    Layout = "~/Views/Shared/_Kurdi.cshtml";
+    lawzandEntities1 dbb = new lawzandEntities1();
+
+    @helper StripHTML(string input)
+    {
+if (!string.IsNullOrEmpty(input))
+{
+    input = Regex.Replace(input, @"(?></?\w+)(?>(?:[^>'""]+|'[^']*'|""[^""]*"")*)>", String.Empty);
+    input = input.Replace("&nbsp;", " ");
+            <span>@input</span>
+        }
+    }
+}
+<div class="topslider">
+    <div class="swiper-container swiper1">
+        <div class="swiper-wrapper">
+
+            
+
+                @foreach (slidertbl s in dbb.slidertbls.Where(x => x.lang == 1).Take(3).OrderByDescending(x => x.sliderId).ToList())
+                {
+
+                    <div class="swiper-slide "> <a href="@s.link" title="@s.slidercontent" target="_blank"><img src="~/Content/images/@s.sliderpic" /></a></div>
+                }
+
+           
+
+
+
+        </div>
+        <!-- Add Pagination -->
+        <div class="swiper-pagination swiper-pagination1"></div>
+    </div>
+</div>
+<div class="servicesection">
+    <div class="maincontent">
+        <div class="header">
+            <h4>خزمەتگوزاریەکان</h4>
+            <div class="liner-wrapper"><div class="line-divider"></div><div class="liner-dot"></div><div class="liner-dot right"></div></div>
+        </div>
+
+
+            @foreach (servicetbl s in dbb.servicetbls.Where(x => x.lang == 1).OrderBy(r => Guid.NewGuid()).Take(3).ToList())
+            {<div class="servitem">
+                    <div class="servitemimg">
+                        <a href="/Home/Service/@s.serviceId" class="image">
+                            <img src="~/Content/images/@s.thumb" />
+                        </a>
+                    </div>
+                    <div class="servtitle">
+                        <h4 class="animated wow fadeInUp">
+                            <a href="/Home/Service/@s.serviceId"><i class="fas fa-square-full"></i> @s.servicename</a>
+                        </h4>
+                        <p class="animated wow fadeInUp">
+                            @StripHTML(s.servicecontent.Length > 100 ? s.servicecontent.Substring(0, 100) : s.servicecontent)
+
+                        </p>
+                    </div>
+
+                </div>}
+
+        <div class="morediv animated wow fadeInUp">
+            <a href="/Home/AllServices" class=""><div class="moreservbtnicon"><i class="fas fa-plus"></i></div><span>سەرجەم خزمەتگوزاریەکان</span></a>
+        </div>
+    </div>
+</div>
+
+<div class="maincontent">
+    <div class="header">
+        <h4>نمونەی کارەکان</h4>
+        <div class="liner-wrapper"><div class="line-divider"></div><div class="liner-dot"></div><div class="liner-dot right"></div></div>
+    </div>
+
+
+
+
+    @foreach (projecttbl s in dbb.projecttbls.Where(x => x.lang == 1).OrderBy(r => Guid.NewGuid()).Take(3).ToList())
+    {<div class="sampleitem animated wow zoomIn">
+        <div class="sampleitemimg">
+            <a href="/Home/Project/@s.projectId" class="image"><img src="~/Content/images/@s.thumb" /></a>
+        </div>
+        <div class="sampleitemcontent">
+            <a href="/Home/Project/@s.projectId">@s.projectname</a>
+        </div>
+    </div>}
+
+
+</div>
+<div class="partner">
+    <div class="maincontent" dir="ltr">
+        <div class="headerc">
+            <h4>هاوبەشەکان</h4>
+        </div>
+        <div class="owl-carousel owl-theme">
+            @foreach (partnertbl pr in dbb.partnertbls.Where(x => x.lang == 1).ToList())
+            {
+            <div class="owlitem">
+                <a href="@pr.partnerlink" title="@pr.partnername"><img src="~/Content/images/@pr.partnerpic" /></a>
+            </div>
+            }
+        </div>
+    </div>
+</div>

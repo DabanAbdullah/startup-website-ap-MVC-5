@@ -1,0 +1,22 @@
+﻿@model lawzand.Models.infotbl
+@{
+    ViewBag.Title = "دەربارە";
+    Layout = "~/Views/Shared/_Kurdi.cshtml";
+}
+
+<div class="maincontent">
+    <div class="header">
+        <h4 >دەربارە</h4>
+        <div class="liner-wrapper"><div class="line-divider"></div><div class="liner-dot"></div><div class="liner-dot right"></div></div>
+    </div>
+    <div class="detaildiv">
+        @Html.Raw(Model.About)
+
+      
+      
+        <br />
+    </div>
+</div>
+<div class="partner">
+
+</div>

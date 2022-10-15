@@ -1,0 +1,185 @@
+﻿@using lawzand.Models
+@model LoginViewModel
+@{
+    Layout = "";
+    ViewBag.Title = "Log in";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Sign In</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="icon" type="image/png" href="images/icons/favicon.ico" />
+
+    <link href="~/Content/js/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
+    <link href="~/Content/login/bootstrap.min.css" rel="stylesheet" />
+
+
+    <link href="~/Content/login/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/login/animate.css" rel="stylesheet" />
+
+
+    <link href="~/Content/login/hamburgers.min.css" rel="stylesheet" />
+    <link href="~/Content/login/select2.min.css" rel="stylesheet" />
+
+    <link href="~/Content/login/util.css" rel="stylesheet" />
+    <link href="~/Content/login/main.css" rel="stylesheet" />
+
+
+    <meta name="robots" content="noindex, follow">
+</head>
+<body>
+    <div class="limiter">
+        <div class="container-login100">
+            <div class="wrap-login100">
+                <div class="login100-pic js-tilt" data-tilt>
+                    <img src="~/Content/login/img-01.png" id="img" alt="IMG">
+                </div>
+
+                @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "login100-form validate-form", role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+
+
+
+
+                    <span class="login100-form-title">
+                        Member Login
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    </span>
+                    <div class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz">
+
+
+                        @Html.EditorFor(m => m.Email, new { htmlAttributes = new { @class = "input100", id = "email", name = "email", placeholder = "Email"} })
+                      
+                       
+                        <span class="symbol-input100">
+                            <i class="fa fa-envelope" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <div class="wrap-input100 validate-input" data-validate="Password is required">
+                        @Html.EditorFor(m => m.Password, new { htmlAttributes = new { @class = "input100", id = "pass", type = "password", name = "pass", placeholder = "Password" } })
+
+                       
+                        <span class="focus-input100"></span>
+                        <span class="symbol-input100">
+                            <i class="fa fa-lock" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <div class="container-login100-form-btn">
+                        <button class="login100-form-btn">
+                            Login
+                        </button>
+                    </div>
+                    <div class="text-center p-t-12">
+                        <span class="txt1">
+                            Forgot
+                        </span>
+                        <a class="txt2" href="#" onclick="forgot(); return false;">
+                            Username / Password?
+                        </a>
+                    </div>
+                    <div class="text-center p-t-136">
+                        <a class="txt2" href="#">
+                          
+                          
+                        </a>
+                    </div>
+
+                }
+            </div>
+        </div>
+    </div>
+    <script src="~/Content/login/jquery-3.2.1.min.js"></script>
+    <script src="~/Content/login/popper.js"></script>
+    <script src="~/Content/login/bootstrap.min.js"></script>
+    <script src="~/Content/login/select2.min.js"></script>
+    <script src="~/Content/login/tilt.jquery.min.js"></script>
+    <script>
+
+
+
+     
+
+
+
+
+        $('.js-tilt').tilt({
+            scale: 1.1
+        })
+
+
+
+
+    </script>
+
+
+    <script src="~/Content/login/main.js"></script>
+
+    <script src="~/Content/js/sweetalert2/sweetalert2.min.js"></script>
+
+    <script src="~/Content/js/sweetalert2/sweet-alerts.init.js"></script>
+
+
+    <script type="text/javascript">
+
+
+
+
+
+        function forgot() {
+
+            Swal.fire({
+                title: 'Write down your email',
+                input: 'text',
+                inputAttributes: {
+                    autocapitalize: 'off'
+                },
+                showCancelButton: true,
+                confirmButtonText: 'Send password',
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    var username = login;
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/Account/forgotpassword",
+                        data: '{username: "' + username + '" }',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (response) {
+
+
+
+                            if (response != "Invalid email") {
+                                Swal.fire({
+                                    position: 'top-end',
+                                    icon: 'success',
+                                    title: response,
+                                    showConfirmButton: false,
+                                    timer: 5000
+                                })
+                            }
+                            else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'this email address does not exist',
+
+                                })
+                            }
+                        }
+                    });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            });
+        }
+    </script>
+
+
+
+
+</body>
+</html>

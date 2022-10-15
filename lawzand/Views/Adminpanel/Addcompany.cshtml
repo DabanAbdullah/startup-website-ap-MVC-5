@@ -1,0 +1,187 @@
+﻿@model lawzand.Models.companytbl
+@using lawzand.Models
+
+@{
+
+    lawzandEntities1 dbb = new lawzandEntities1();
+
+    ViewBag.Title = "AddCompany";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+
+</div>
+<br />
+<hr />
+@using (Html.BeginForm("Addcompany", "Adminpanel", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Add New Company</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            <label class="control-label col-md-2" for="lang">Id</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.companyId, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                @Html.ValidationMessageFor(model => model.companyId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2" for="lang">Photo</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.companypic, new { htmlAttributes = new { @class = "form-control", type = "file" } })
+                @Html.ValidationMessageFor(model => model.companypic, "", new { @class = "text-danger" })
+            </div>
+
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2" for="lang">Preview</label>
+            <div class="col-md-10">
+                <img src="~/Content/images/@Model.thumb" id="prev" class="img-rounded img-responsive form-control" style="width:600px; height:200px;" />
+            </div>
+
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2" for="lang">Name</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.companyname, new { htmlAttributes = new { @class = "form-control", placeholder = "company Name", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.companyname, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2" for="lang">Content</label>
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.companycontent, new { @id = "content", @class = "form-control", @rows = "200" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2" for="lang">Language</label>
+            <div class="col-md-10">
+
+                <select class="form-control select2" id="lang" name="lang">
+                    @{
+                        foreach (langtbl l in dbb.langtbls.ToList())
+                        {
+                            <option value=@l.id>@l.language</option>
+                        }
+                    }
+
+                </select>
+
+            </div>
+        </div>
+
+
+
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+        <div class="form-group">
+
+            <div class="col-md-10">
+                @if (ViewBag.result != null)
+                {
+                    <p>@ViewBag.result</p>
+                }
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+}
+
+<div>
+    @Html.ActionLink("Back to List", "partners")
+</div>
+
+
+@section scripts{
+
+    <script src="~/Content/ckeditor/ckeditor.js"></script>
+
+
+    @if (Model != null)
+    {
+        <script>
+        CKEDITOR.replace("content");
+
+
+
+
+
+        function readURL(input) {
+
+          $('#prev').attr('src', '/Content/images/@Model.companypic');
+
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#prev').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#companypic").change(function () {
+            readURL(this);
+        });
+
+
+        </script>
+    }
+
+
+    else
+    {
+        <script>
+        CKEDITOR.replace("content");
+
+
+
+
+
+        function readURL(input) {
+
+          $('#prev').attr('src', '');
+
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#prev').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#companypic").change(function () {
+            readURL(this);
+        });
+
+
+        </script>
+    }
+
+
+
+}

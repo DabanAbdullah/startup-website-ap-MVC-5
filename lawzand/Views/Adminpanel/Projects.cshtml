@@ -1,0 +1,184 @@
+﻿@using lawzand.Models
+@{
+    ViewBag.Title = "Admin Projects";
+    lawzandEntities1 dbb = new lawzandEntities1();
+}
+
+@section style{
+
+    
+    }
+
+
+<div class="jumbotron">
+    <h1>Projects</h1>
+
+    <p><a href="~/Adminpanel/Addproject" class="btn btn-primary btn-lg">Create New &raquo;</a></p>
+</div>
+
+
+<div class="row">
+
+
+
+
+
+
+
+
+
+    @{
+        try
+        {
+
+    <ul class="nav nav-tabs">
+
+        <li><a data-toggle="tab" href="#0"></a></li>
+        @foreach (langtbl aa in dbb.langtbls.ToList())
+        {
+
+            <li><a data-toggle="tab" href="#@aa.language">@aa.language</a></li>
+
+
+        }
+
+
+
+
+    </ul>
+
+    <div class="tab-content">
+
+
+
+
+
+        <div id="0" class="tab-pane fade active">
+
+            </div>
+
+
+
+            @foreach (langtbl aa in dbb.langtbls.ToList())
+            {
+
+
+                <div id="@aa.language" class="tab-pane ">
+
+
+
+
+
+
+
+
+
+                    @foreach (projecttbl s in dbb.projecttbls.Where(x => x.lang == aa.id).ToList().OrderByDescending(x => x.projectId))
+                    {<div class="col-md-4">
+
+                            <a href="~/Adminpanel/Uploadtoproject/@s.projectId"> <h3> @s.projectname</h3> </a>
+
+
+                            <img src="~/Content/images/@s.thumb" class="img-responsive img-thumbnail" style="height:200px; width:350px" />
+                            <hr />
+                            <p>
+                                <a class="btn btn-danger" id="@s.projectId" href="#" onclick="return deleteproject(this.id)">Delete &raquo;</a>
+                                <a class="btn btn-success" href="/Adminpanel/Addproject/@s.projectId">Edit &raquo;</a>
+
+
+                            </p>
+
+
+                        </div>
+
+                    }
+
+
+                </div>
+
+
+
+            }
+
+
+
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+        }
+        catch { }
+        }
+
+    </div>
+
+
+
+
+<script>
+
+    function deleteproject(id) {
+
+
+        Swal.fire({
+            title: 'Do you want to delete selected Project?',
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: 'Delete',
+
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Adminpanel/deleteproject",
+                    data: '{pid: ' + id + ' }',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+
+
+
+                        if (response == "deleted succefully") {
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'success',
+                                title: response,
+                                showConfirmButton: false,
+                                timer: 2000
+                            })
+
+                            setTimeout(() => { window.location = '/Adminpanel/Projects'; }, 3000);
+                        }
+                        else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: response,
+
+                            })
+                        }
+                    }
+                });
+
+
+
+            }
+        })
+    }
+
+</script>
+
+@section scripts{
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>}

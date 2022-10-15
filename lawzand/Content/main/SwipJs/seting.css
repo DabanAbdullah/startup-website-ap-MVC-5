@@ -1,0 +1,51 @@
+﻿.swiper-container {
+        width: 100%;
+        height: 100%;
+}
+.swiper-slide {
+         text-align: center;
+        font-size: 18px;
+        background: #fbfbfb;
+
+        /* Center slide text vertically */
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: block;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        -webkit-justify-content: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        -webkit-align-items: center;
+        align-items: center;
+        overflow:visible; z-index:1
+    }
+.swiper-slide img{position : relative;
+  right:auto; top:0; width:100%; }
+
+    @media only screen and (max-width: 640px) {
+.swiper-slide {
+    display: flex; 
+    justify-content: center; height:250px; width:100%; overflow:hidden
+    }
+.swiper-slide img{
+ -moz-transition: all 0.4s;
+  -webkit-transition: all 0.4s;
+  transition: all 0.4s; width:unset; height:220px; 
+}
+}
+   
+    .owlitem{
+        box-sizing: border-box; background-color:transparent;display: flex;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        -webkit-justify-content: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        -webkit-align-items: center;
+        align-items: center; height:70px
+    }
+    .owlitem img{max-width:160px; max-height:70px}
